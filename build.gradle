@@ -1,0 +1,70 @@
+apply plugin: 'scala'
+
+repositories {
+    mavenRepo urls: 'http://scala-tools.org/repo-releases/'
+    mavenCentral()
+}
+
+
+dependencies {
+    scalaTools group: 'org.scala-lang', name: 'scala-compiler', version: '2.9.0'
+    scalaTools group: 'org.scala-lang', name: 'scala-library', version: '2.9.0'
+    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.9.0'
+    compile group: 'log4j', name: 'log4j', version: '1.2.16'
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.1'
+    compile group: 'com.weiglewilczek.slf4s', name: 'slf4s_2.9.0-1', version: '1.0.6'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
+    compile group: 'com.jgoodies', name: 'looks', version: '2.1.4'
+    compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
+    //compile group: '', name: '', version: ''
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+compile fileTree(dir: 'lib', include: '*.jar')
+}
+
+
+// This way scala and java files are compiled together since they are treated as scala files.
+// 
+sourceSets.main {
+    java.srcDirs = []
+    scala.srcDir 'src/main/java'
+}
+
+
+task distclean(type: Delete) {
+	delete('dist')
+}
+
+clean.dependsOn(distclean) 
+
+// task dist(type: Copy) {
+//     from configurations.runtime
+//     into 'dist/libs'
+//     from 'build/libs'
+//     into 'dist'
+// }
+
+task dist {
+  copy {
+    from configurations.runtime
+    into 'dist/lib'
+  }
+  copy {
+    from 'build/libs'
+    into 'dist'
+  }
+  copy {
+    from 'resources'
+    into 'dist'
+    include 'verdandi.sh'
+    include 'verdandi.bat'
+  }
+}
+
+dist.dependsOn(assemble)
+// compileScala {
+//     scalaCompileOptions.useCompileDaemon = true
+// 
+//     // optionally specify host and port of the daemon:
+//     scalaCompileOptions.daemonServer = "localhost:4243"
+// }
