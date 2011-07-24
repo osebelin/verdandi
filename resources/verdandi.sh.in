@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+DB_HOST=%DB_HOST%
+DB_NAME=%DB_NAME%
+JAVA=java
+
+cd `dirname $0`
+
+CLASSPATH=verdandi.jar
+for i in lib/*.jar; do
+    CLASSPATH=$CLASSPATH:$i;
+done
+
+$JAVA -cp $CLASSPATH -Dverdandi.db.host=$DB_HOST -Dverdandi.db.name=$DN_NAME verdandi.ui.Main
