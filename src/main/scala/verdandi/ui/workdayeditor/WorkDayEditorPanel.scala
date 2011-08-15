@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui.workdayeditor
 
 import verdandi.model.WorkRecord
@@ -47,7 +49,7 @@ class WorkDayEditorPanel(wde: WorkDayEditor = new WorkDayEditor) extends BorderP
 
     reactions += {
       case evt: PersonalCostUnitSelectionChanged => populateStartMenu()
-      case evt: DatePicker.DayChanged => checkStartMenuActivation(evt)
+      case evt: DatePicker.DayChanged => dayChanged(evt)
     }
     xLayoutAlignment = 0.5
     yLayoutAlignment = 0.5
@@ -84,7 +86,7 @@ class WorkDayEditorPanel(wde: WorkDayEditor = new WorkDayEditor) extends BorderP
       itemList.foreach(startTrackingMenu.add(_))
     }
 
-    private def checkStartMenuActivation(evt: DatePicker.DayChanged) {
+    private def dayChanged(evt: DatePicker.DayChanged) {
       val today = RichCalendar()
       val newDate = RichCalendar(evt.day)
       startTrackingMenu.enabled = today.get(Calendar.DAY_OF_YEAR) == newDate.get(Calendar.DAY_OF_YEAR)

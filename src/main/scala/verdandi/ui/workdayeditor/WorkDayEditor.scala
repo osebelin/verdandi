@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui.workdayeditor
 
 import verdandi.model.CostUnit
@@ -74,8 +76,8 @@ class WorkDayEditor(val model: WorkDayEditorModel = new WorkDayEditorModel) exte
     // TODO: This could replace the other occurrences!
     //case popupTrigger:MouseButtonEvent if popupTrigger.triggersPopup => showPopup(popupTrigger.point)  
 
-    case evt: MousePressed if evt.triggersPopup => requestFocusInWindow(); showPopup(evt.point)
-    case evt: MousePressed => requestFocusInWindow(); passOnEvent(evt.point, evt)
+    case evt: MousePressed if evt.triggersPopup => { requestFocusInWindow(); showPopup(evt.point) }
+    case evt: MousePressed => { requestFocusInWindow(); passOnEvent(evt.point, evt) }
     case evt: MouseReleased => {
       cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
       draggingWorkRecord match {
@@ -121,6 +123,8 @@ class WorkDayEditor(val model: WorkDayEditorModel = new WorkDayEditorModel) exte
     reload()
   }
 
+  def currentDay = model.date
+
   /** Returns the work record that is currently dragged, if any */
   private def draggingWorkRecord(): Option[EditableWorkRecord] = editableRecords.find(wr => wr.dragStart != None)
 
@@ -139,13 +143,13 @@ class WorkDayEditor(val model: WorkDayEditorModel = new WorkDayEditorModel) exte
 
   private def passOnEvent(point: Point, evt: Event): Boolean = {
     recordUnderCursor(point) match {
-      case Some(wr) => wr.publish(evt); true
+      case Some(wr) => { wr.publish(evt); true }
       case None => false
     }
   }
 
   def reload() = {
-    logger.debug("reload (and repaint)")
+    logger.trace("reload (and repaint)")
     load()
     repaint()
   }

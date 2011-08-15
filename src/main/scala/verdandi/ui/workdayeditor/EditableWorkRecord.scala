@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui.workdayeditor
 
 import verdandi.event.StopTrackingWorkRecordEvent
@@ -122,6 +124,7 @@ class EditableWorkRecord(var rec: WorkRecord, editor: WorkDayEditor) extends Ver
   }
 
   def dragged(evt: MouseDragged) {
+    logger.debug("########### DRAGGED")
     require(dragStartY != None)
     dragAction(evt)
     editor.repaint
@@ -178,7 +181,8 @@ class EditableWorkRecord(var rec: WorkRecord, editor: WorkDayEditor) extends Ver
       }
     }
     def withinBounds(): Boolean = {
-      CFG.lowerBound.toDate <= rec.start && CFG.upperBound.toDate >= rec.end
+      logger.debug("CFG.lowerBound.toDate: " + CFG.lowerBound.toDate)
+      CFG.lowerBound.hour <= RichCalendar(rec.start).hour && CFG.upperBound.hour >= RichCalendar(rec.end).hour
     }
     collides(editor.contents) && withinBounds
   }

@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui.workdayeditor
 
 import verdandi.ui.VerdandiComponent
@@ -75,17 +77,25 @@ trait ScheduledCanvas extends VerdandiComponent with Logging {
 
   def toDate(yPosition: Int): Date = toDate(yPosition, true)
 
+  protected def currentDay: Date
+
+  private def stdCalendar = {
+    val cal = Calendar.getInstance()
+    cal.setTime(currentDay)
+    cal.set(Calendar.HOUR_OF_DAY, firstHour)
+    cal.set(Calendar.MINUTE, 0)
+    cal.set(Calendar.SECOND, 0)
+    cal.set(Calendar.MILLISECOND, 0)
+    cal
+  }
+
   /**
    * @param yPosition
    * @param round If true, round, else cap
    * @return
    */
   def toDate(yPosition: Int, round: Boolean): Date = {
-    val cal = Calendar.getInstance()
-    cal.set(Calendar.HOUR_OF_DAY, firstHour)
-    cal.set(Calendar.MINUTE, 0)
-    cal.set(Calendar.SECOND, 0)
-    cal.set(Calendar.MILLISECOND, 0)
+    val cal = stdCalendar
 
     val today = cal.get(Calendar.DAY_OF_MONTH)
 
@@ -111,15 +121,13 @@ trait ScheduledCanvas extends VerdandiComponent with Logging {
       cal.set(Calendar.MINUTE, 60 - minuteGranularity);
     }
 
-    cal.getTime()
+    val res = cal.getTime()
+    logger.debug("Resolved y " + yPosition + " to " + res)
+    res
   }
 
   def toPosition(d: Date): Int = {
-    val cal = Calendar.getInstance()
-    cal.set(Calendar.HOUR_OF_DAY, firstHour)
-    cal.set(Calendar.MINUTE, 0)
-    cal.set(Calendar.SECOND, 0)
-    cal.set(Calendar.MILLISECOND, 0)
+    val cal = stdCalendar
     val minutes: Int = ((d.getTime - cal.getTime.getTime) / (1000 * 60)).toInt
     (pixelsPerMinute * minutes.toFloat).toInt
   }
