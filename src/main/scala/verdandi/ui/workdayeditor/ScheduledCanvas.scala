@@ -28,21 +28,22 @@ import java.awt.geom.Line2D
 import java.awt.font.TextLayout
 import java.util.{ Calendar, Date }
 import com.weiglewilczek.slf4s.Logging
+import verdandi.model.VerdandiConfiguration
 
 /**
  * A canvas with a time schedule.
  */
 trait ScheduledCanvas extends VerdandiComponent with Logging {
 
-  minimumSize = new Dimension(400, 600)
+  minimumSize = new Dimension(400, 400)
   preferredSize = minimumSize
 
   private[ui] def width = size.width
   private[ui] def height = size.height
 
-  private[ui] val minimumSlotSize = 10
+  private[ui] def minimumSlotSize = VerdandiConfiguration.WorkDayEditorConfiguration.minPixelsPerSlot
+  private[ui] var slotHeight = 5
 
-  private[ui] var slotHeight = 10
   private[ui] var slotsPerHour: Int = 4
 
   // has to be recalculated if CFG changes
@@ -149,7 +150,7 @@ trait ScheduledCanvas extends VerdandiComponent with Logging {
 
   // durch den verdandi cmponent mixin 
   override def setBounds(x: Int, y: Int, w: Int, h: Int) {
-    logger.trace("Set bounds!: " + x + "," + y + "@" + w + "x" + h)
+    logger.debug("Set bounds!: " + x + "," + y + "@" + w + "x" + h)
     super.setBounds(x, y, w, h)
     recalculateDimensions()
 
@@ -162,8 +163,10 @@ trait ScheduledCanvas extends VerdandiComponent with Logging {
     // calucalte it over the slot height since there may be offsets
     pixelsPerMinute = slotHeight.toFloat / minuteGranularity
     val recal = slotHeight * totalHours * slotsPerHour
-    logger.trace("pixelsPerMinute: %f, slotHeight=%d, #slots=%d, slot*slotheight=%d".format(pixelsPerMinute, slotHeight, (totalHours * slotsPerHour), recal))
-    minimumSize = new Dimension(minimumSize.width, (totalHours * slotsPerHour * minimumSlotSize));
+    logger.debug("pixelsPerMinute: %f, slotHeight=%d, #slots=%d, slot*slotheight=%d".format(pixelsPerMinute, slotHeight, (totalHours * slotsPerHour), recal))
+    logger.debug("minHeight: " + (totalHours * slotsPerHour * minimumSlotSize))
+    minimumSize = new Dimension(minimumSize.width, totalHours * slotsPerHour * minimumSlotSize)
+    preferredSize = minimumSize
   }
 
   override def paintComponent(g: Graphics2D) {

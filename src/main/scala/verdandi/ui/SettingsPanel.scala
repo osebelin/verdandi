@@ -1,30 +1,33 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui
 
 import verdandi.model.CostUnit
 import scala.swing.CheckBox
-import scala.swing. {Label, ComboBox}
+import scala.swing.{ Label, ComboBox }
 import scala.swing.GridBagPanel._
 import verdandi.event._
-import verdandi.model. {VerdandiConfiguration, VerdandiModel}
+import verdandi.model.{ VerdandiConfiguration, VerdandiModel }
 import verdandi.ui.swing._
+import scala.swing.TextField
 
 class SettingsPanel extends RichGridBagPanel {
 
@@ -35,6 +38,8 @@ class SettingsPanel extends RichGridBagPanel {
   val okCancelPanel =
     new OKCancelPanel(commit, revert, TextResources("settingseditor.label.commit"),
       TextResources("settingseditor.label.revert"))
+
+  val minPixelsPerSlot = new TextField(2)
 
   val firstWorkHour =
     new ComboBox(1 to 23)
@@ -57,11 +62,13 @@ class SettingsPanel extends RichGridBagPanel {
   val exitOnClose =
     new CheckBox(TextResources("settingseditor.label.exitonclose"))
 
+  minPixelsPerSlot.inputVerifier = (c => c.asInstanceOf[TextField].text.matches("[0-9]*"))
 
-  add(new Label(TextResources("settingseditor.workday.lower.boundary"))
-    , c)
-  add(new Label(TextResources("settingseditor.workday.upper.boundary"))
-    , c.withGridYInc)
+  add(new Label(TextResources("settingseditor.label.minPixelPerSlot")), c)
+  add(minPixelsPerSlot, c.withGridXInc)
+
+  add(new Label(TextResources("settingseditor.workday.lower.boundary")), c.withGridYInc.withGridXDec)
+  add(new Label(TextResources("settingseditor.workday.upper.boundary")), c.withGridYInc)
   add(firstWorkHour, c.withGridYDec.withGridXInc)
   add(lastWorkHour, c.withGridYInc)
 
@@ -72,8 +79,7 @@ class SettingsPanel extends RichGridBagPanel {
 
   add(exitOnClose, c.withGridYInc.withGridX(0).withGridWidth(2))
 
-  add(okCancelPanel, c.withGridYInc.withAnchor(Anchor.SouthEast).withInsets(10,0,2,2))
-
+  add(okCancelPanel, c.withGridYInc.withAnchor(Anchor.SouthEast).withInsets(10, 0, 2, 2))
 
   reactions += {
     case _: CostUnitEvent => loadCostUnits()
@@ -99,6 +105,7 @@ class SettingsPanel extends RichGridBagPanel {
     if (costUnitSelectorModel.getSelectedItem != null)
       VerdandiConfiguration.costUnitToTrackOnLoad = costUnitSelectorModel.getSelectedItem.asInstanceOf[CostUnit].id
     VerdandiConfiguration.exitOnClose = exitOnClose.selected
+    VerdandiConfiguration.WorkDayEditorConfiguration.minPixelsPerSlot = minPixelsPerSlot.text.toInt
     EventBroadcaster.publish(ConfigurationChangedEvent())
   }
 
@@ -108,6 +115,7 @@ class SettingsPanel extends RichGridBagPanel {
     startHidden.selected = VerdandiConfiguration.startHidden
     startTrackingOnLoad.selected = VerdandiConfiguration.startTrackingOnLoad
     exitOnClose.selected = VerdandiConfiguration.exitOnClose
+    minPixelsPerSlot.text = VerdandiConfiguration.WorkDayEditorConfiguration.minPixelsPerSlot.toString
   }
 
 }

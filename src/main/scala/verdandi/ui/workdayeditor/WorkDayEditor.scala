@@ -114,6 +114,7 @@ class WorkDayEditor(val model: WorkDayEditorModel = new WorkDayEditorModel) exte
   init()
 
   def init() {
+    minimumSize = new Dimension(300, CFG.minHeight)
     listenTo(this.Mouse.clicks)
     listenTo(this.Mouse.moves)
     listenTo(model)
@@ -167,8 +168,6 @@ class WorkDayEditor(val model: WorkDayEditorModel = new WorkDayEditorModel) exte
     setBoundsOnContents()
     logger.trace("today has " + editableRecords.size + " work records: " + editableRecords)
   }
-
-  override def minimumSize: Dimension = new Dimension(300, CFG.minHeight)
 
   override def paintComponent(g: Graphics2D) {
     logger.trace("Paint component: Location: " + location + " / " + locationOnScreen + " and forwarding to " + editableRecords.size + " work records")

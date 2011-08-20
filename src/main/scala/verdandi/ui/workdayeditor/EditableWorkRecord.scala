@@ -210,7 +210,7 @@ class EditableWorkRecord(var rec: WorkRecord, editor: WorkDayEditor) extends Ver
     g2d.fill(rect)
     g2d.setColor(EditableWorkRecord.borderColor)
     val oldStroke = g2d.getStroke()
-    g2d.setStroke(new BasicStroke(2.5F));
+    g2d.setStroke(new BasicStroke(2.0F));
     g2d.draw(rect);
     g2d.setStroke(oldStroke);
     if (hasFocus) {
