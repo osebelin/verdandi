@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.ui
 import javax.swing.JFrame
 import java.awt.{ SystemTray, TrayIcon, Frame => AWTFrame }
@@ -36,11 +38,21 @@ class VerdandiSystemTray(mainWindow: JFrame) extends Reactor with Logging {
   private var trayIcon: TrayIcon = _
 
   reactions += {
-    case start: StartTrackingWorkRecordEvent => trayIcon.setImage(okImage)
-    case stop: StopTrackingWorkRecordEvent => trayIcon.setImage(warnImage)
+    case start: StartTrackingWorkRecordEvent => startTracking(start)
+    case stop: StopTrackingWorkRecordEvent => stopTracking(stop)
   }
 
   listenTo(EventBroadcaster)
+
+  private def startTracking(evt: StartTrackingWorkRecordEvent) {
+    trayIcon.setImage(okImage)
+    trayIcon.setToolTip(TextResources.getText("tray.tracking.tooltip", Map("COSTUNIT" -> evt.workRecord.getAssociatedProject())))
+  }
+
+  private def stopTracking(evt: StopTrackingWorkRecordEvent) {
+    trayIcon.setImage(warnImage)
+    trayIcon.setToolTip(TextResources.getText("tray.nottracking.tooltip"))
+  }
 
   private object TrayListener extends MouseListener {
 
@@ -48,9 +60,14 @@ class VerdandiSystemTray(mainWindow: JFrame) extends Reactor with Logging {
 
     def mouseClicked(evt: AWTMouseEvent) = {
       if (evt.getButton() == AWTMouseEvent.BUTTON1) {
-        if (mainWindow.isVisible()) mainWindow.setState(AWTFrame.ICONIFIED);
-        else mainWindow.setState(AWTFrame.NORMAL);
-        mainWindow.setVisible(!mainWindow.isVisible());
+        val wasVisible = mainWindow.isVisible()
+        mainWindow.setVisible(!wasVisible)
+        if (wasVisible) {
+          mainWindow.setState(AWTFrame.ICONIFIED)
+        } else {
+          mainWindow.setState(AWTFrame.NORMAL)
+          mainWindow.toFront()
+        }
       }
     }
     def mouseEntered(evt: AWTMouseEvent) = {}
