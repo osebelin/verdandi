@@ -37,12 +37,6 @@ task distclean(type: Delete) {
 
 clean.dependsOn(distclean) 
 
-// task dist(type: Copy) {
-//     from configurations.runtime
-//     into 'dist/libs'
-//     from 'build/libs'
-//     into 'dist'
-// }
 
 task dist {
   copy {
