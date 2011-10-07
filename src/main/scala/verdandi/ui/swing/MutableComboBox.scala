@@ -24,8 +24,9 @@ import javax.swing.ComboBoxModel
 import javax.swing.AbstractListModel
 import javax.swing.JComboBox
 import scala.swing.ComboBox
+import scala.swing.Component
 
-class MutableComboBoxModel[A](var _items: Seq[A]) extends AbstractListModel with ComboBoxModel {
+class MutableComboBoxModel[A](var _items: Seq[A]) extends AbstractListModel[A] with ComboBoxModel[A] {
   private var selected = _items.lift(0).getOrElse(null)
   def getSelectedItem: AnyRef = selected.asInstanceOf[AnyRef]
   def setSelectedItem(a: Any) {
@@ -35,7 +36,7 @@ class MutableComboBoxModel[A](var _items: Seq[A]) extends AbstractListModel with
       fireContentsChanged(this, -1, -1)
     }
   }
-  def getElementAt(n: Int) = _items(n).asInstanceOf[AnyRef]
+  def getElementAt(n: Int) = _items(n).asInstanceOf[A]
   def getSize = _items.size
 
   def items = _items
@@ -46,6 +47,8 @@ class MutableComboBoxModel[A](var _items: Seq[A]) extends AbstractListModel with
 
 }
 
-class MutableComboBox[A](model: MutableComboBoxModel[A]) extends ComboBox(List()) {
-  override lazy val peer: JComboBox = new JComboBox(model) with SuperMixin
+// FIXME: Inherit scala.swing.ComboBox once fix for https://issues.scala-lang.org/browse/SI-3634 is released
+class MutableComboBox[A](model: MutableComboBoxModel[A]) extends Component {
+  override lazy val peer: JComboBox[A] = new JComboBox(model) with SuperMixin
+
 }
