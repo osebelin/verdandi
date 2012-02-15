@@ -63,7 +63,8 @@ public class SummaryItem implements Serializable {
     this(projectid, projectName, duration, projectName);
   }
 
-  public SummaryItem(String projectid, String projectName, int duration, String description) {
+  public SummaryItem(String projectid, String projectName, int duration,
+      String description) {
     super();
     this.projectid = projectid;
     this.projectName = projectName;
@@ -75,7 +76,8 @@ public class SummaryItem implements Serializable {
     this(projectid, projectName, duration.intValue(), projectName);
   }
 
-  public SummaryItem(String projectid, String projectName, Long duration, String description) {
+  public SummaryItem(String projectid, String projectName, Long duration,
+      String description) {
     this(projectid, projectName, duration.intValue(), description);
   }
 
@@ -159,7 +161,8 @@ public class SummaryItem implements Serializable {
    *          The displayMode to set.
    */
   public static void setDisplayMode(int displayMode) {
-    if (displayMode == DISPLAY_DURATION_HH_QUARTER || displayMode == DISPLAY_DURATION_HHMM) {
+    if (displayMode == DISPLAY_DURATION_HH_QUARTER
+        || displayMode == DISPLAY_DURATION_HHMM) {
       SummaryItem.displayMode = displayMode;
     } else {
       throw new IllegalArgumentException(
@@ -179,6 +182,13 @@ public class SummaryItem implements Serializable {
       return projectName;
     }
     return description;
+  }
+
+  public String formatDurationInManDays() {
+    int days = duration / (8 * 60);
+    int hrs = duration % (8 * 60) / 60;
+    int mins = duration % (8 * 60) % 60;
+    return String.format("%02d:%02d:%02d", days, hrs, mins);
   }
 
 }

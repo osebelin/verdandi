@@ -21,25 +21,29 @@
 package verdandi
 
 import java.util.{ Calendar, Date }
+import java.util.Calendar._
 
 class RichCalendar(val cal: Calendar) extends Ordered[Calendar] {
 
+  cal.set(SECOND, 0)
+  cal.set(MILLISECOND, 0)
+
   override def compare(other: Calendar): Int = cal.compareTo(other)
 
-  val zeroableFields = List(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND, Calendar.MILLISECOND)
+  val zeroableFields = List(HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND)
 
   def zeroBelow(field: Int): RichCalendar = {
     zeroableFields.filter(_ > field).foreach(x => cal.set(x, 0))
     this
   }
 
-  def hour: Int = cal.get(Calendar.HOUR_OF_DAY)
+  def hour: Int = cal.get(HOUR_OF_DAY)
   def hour(h: Int): RichCalendar = {
-    cal.set(Calendar.HOUR_OF_DAY, h)
+    cal.set(HOUR_OF_DAY, h)
     this
   }
 
-  def minute: Int = cal.get(Calendar.MINUTE)
+  def minute: Int = cal.get(MINUTE)
 
   def minute(m: Int): RichCalendar = {
     cal.set(Calendar.MINUTE, m)
@@ -52,14 +56,26 @@ class RichCalendar(val cal: Calendar) extends Ordered[Calendar] {
   }
 
   def hhmm(hour: Int, minute: Int): RichCalendar = {
-    cal.set(Calendar.HOUR_OF_DAY, hour)
-    cal.set(Calendar.MINUTE, minute)
-    cal.set(Calendar.SECOND, 0)
-    cal.set(Calendar.MILLISECOND, 0)
+    cal.set(HOUR_OF_DAY, hour)
+    cal.set(MINUTE, minute)
+
     this
   }
 
   def toDate(): RichDate = new RichDate(cal.getTime)
+
+  def dayOfWeek(dow: Int): RichCalendar = {
+    zeroableFields.foreach(cal.set(_, 0))
+    cal.set(DAY_OF_WEEK, dow)
+    this
+  }
+
+  def monday(): RichCalendar = dayOfWeek(MONDAY)
+
+  def add(field: Int, value: Int): RichCalendar = {
+    cal.add(field, value)
+    this
+  }
 
 }
 
@@ -74,10 +90,6 @@ object RichCalendar {
   }
   def apply(cal: Calendar): RichCalendar = new RichCalendar(cal)
 
-  def apply(date: Date, toZeroBelow: Int): RichCalendar = {
-    val res = new RichCalendar(Calendar.getInstance)
-    res.cal.setTime(date)
-    res
-  }
+  def apply(from: RichCalendar): RichCalendar = new RichCalendar(from.cal.clone().asInstanceOf[Calendar])
 
 }

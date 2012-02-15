@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.model.persistence
 
 import verdandi.event.PersonalCostUnitSelectionChanged
@@ -157,7 +159,7 @@ class VerdandiPersistenceWrapper extends VerdandiPersistence with Reactor with L
    */
   // TODO: add a boolean parameter: GroupByDescription!
   def getDurationSummaries(start: Date, end: Date, groupByAnnotation: Boolean): JList[SummaryItem] =
-    new JArrayList[SummaryItem](recordStorage getDurationSummaries (start, end, groupByAnnotation))
+    new JArrayList[SummaryItem](recordStorage getDurationSummaries (start, end))
 
   def getConfigurationDescription(): PersistenceConfigurationDescription = null
 

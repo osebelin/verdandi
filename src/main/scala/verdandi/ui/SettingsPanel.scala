@@ -31,9 +31,7 @@ import scala.swing.TextField
 
 class SettingsPanel extends RichGridBagPanel {
 
-  val c = new RichGridbagConstraints()
-    .withInsets(2, 2, 2, 2).withGridX(0).withGridY(0).withFill(Fill.None).withWeightX(0.0).withWeightY(0.0)
-    .withAnchor(Anchor.West)
+  val c = RichGridbagConstraints.default.withInsets(2, 2, 2, 2).withAnchor(Anchor.West)
 
   val okCancelPanel =
     new OKCancelPanel(commit, revert, TextResources("settingseditor.label.commit"),

@@ -105,12 +105,7 @@ class WorkDayEditorPanel(wde: WorkDayEditor = new WorkDayEditor) extends BorderP
     initControls()
 
     def initControls() {
-      val c = new RichGridbagConstraints()
-        .withGridX(0)
-        .withGridY(0)
-        .withFill(Fill.None)
-        .withWeightX(0.0)
-        .withWeightY(0.0)
+      val c = RichGridbagConstraints.default
 
       val cuSelPanel = new RichBoxPanel(Orientation.Horizontal) {
         contents += new Label(TextResources.getText("label.costunit"))

@@ -1,21 +1,23 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2010 Olaf Sebelin
- * 
+ *
  * This file is part of Verdandi.
- * 
+ *
  * Verdandi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Verdandi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Verdandi.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ * ****************************************************************************
+ */
 package verdandi.model.persistence
 
 import verdandi.model.WorkRecord
@@ -59,7 +61,6 @@ trait CostUnitUserStorage extends CostUnitStorage {
 
 }
 
-
 trait WorkRecordStorage {
   def newWorkRecord(c: CostUnit): WorkRecord = newWorkRecord(c, new Date(), VerdandiConfiguration.timeResolution)
   def newWorkRecord(c: CostUnit, start: Date): WorkRecord = newWorkRecord(c, start, VerdandiConfiguration.timeResolution)
@@ -71,7 +72,7 @@ trait WorkRecordStorage {
    * @return The WorkRecords between from and to, ordered by start date
    */
   def getWorkRecords(from: Date, to: Date): List[WorkRecord]
-  def getDurationSummaries(start: Date, end: Date, groupByAnnotation: Boolean): List[SummaryItem]
+  def getDurationSummaries(start: Date, end: Date): List[SummaryItem]
 }
 
 abstract class AbstractUserStorage extends CostUnitUserStorage with WorkRecordStorage with Publisher {
