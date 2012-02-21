@@ -191,4 +191,10 @@ public class SummaryItem implements Serializable {
     return String.format("%02d:%02d:%02d", days, hrs, mins);
   }
 
+  public String formatDurationInManHours() {
+    int hrs = duration / 60;
+    int mins = duration % 60;
+    return String.format("%02d:%02d", hrs, mins);
+  }
+
 }

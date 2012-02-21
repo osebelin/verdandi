@@ -25,6 +25,13 @@ import scala.swing.GridBagPanel
 import java.awt.Insets
 
 class RichGridBagPanel extends GridBagPanel {
+
+  override protected def add(c: Component, l: Constraints) {
+    peer.add(c.peer, l.peer)
+  }
+
+  def getPeer() = peer.asInstanceOf[javax.swing.JPanel]
+
   class RichGridbagConstraints extends Constraints {
     import scala.swing.GridBagPanel._
     def having[T](f: T => Unit, value: T): RichGridbagConstraints = {
@@ -48,10 +55,6 @@ class RichGridBagPanel extends GridBagPanel {
     def withInsets(top: Int, left: Int, bottom: Int, right: Int) = having(insets_=, new Insets(top, left, bottom, right))
     def withIpaX(x: Int) = having(ipadx_=, x)
     def withIpadY(y: Int) = having(ipady_=, y)
-  }
-
-  override protected def add(c: Component, l: Constraints) {
-    peer.add(c.peer, l.peer)
   }
 
   object RichGridbagConstraints {

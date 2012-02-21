@@ -21,18 +21,21 @@
 package verdandi.ui
 
 import java.util.ResourceBundle
+import com.weiglewilczek.slf4s.Logging
 
-object TextResources {
+object TextResources extends Logging {
 
   private val rc = ResourceBundle.getBundle("verdandi/ui/TextResources");
 
   def apply(key: String): String = getText(key)
 
   def getText(key: String): String = {
-    if (rc.containsKey(key))
+    if (rc.containsKey(key)) {
       rc.getString(key)
-    else
+    } else {
+      logger.warn("Undefined text resource " + key)
       key
+    }
   }
 
   def getText(key: String, tokens: Map[String, Any]): String = {
