@@ -8,6 +8,7 @@ import java.util.Calendar
 import scala.swing.Reactor
 import verdandi.event.WorkRecordEvent
 import verdandi.event.EventBroadcaster
+import verdandi.Predef._
 
 class SummaryModel extends WidthStoringTableModel {
 
@@ -18,7 +19,7 @@ class SummaryModel extends WidthStoringTableModel {
 
   var items: List[SummaryItem] = _
 
-  var period: Period = CurrentWeek()
+  var period: Period = FixedWeek()
 
   loadItems()
 
@@ -30,7 +31,7 @@ class SummaryModel extends WidthStoringTableModel {
   }
 
   def loadItems() {
-    items = VerdandiModel.workRecordStorage.getDurationSummaries(period.from, period.to);
+    items = VerdandiModel.workRecordStorage.getDurationSummaries(period.from.toDate(), period.to.toDate());
   }
 
   override def getRowCount(): Int = items.length
@@ -46,11 +47,18 @@ class SummaryModel extends WidthStoringTableModel {
 }
 
 abstract case class Period {
-  def from: RichDate
-  def to: RichDate
+  def from: RichCalendar
+  def to: RichCalendar
 }
 
-case class CurrentWeek extends Period {
-  def from = RichCalendar().monday.toDate
-  def to = RichCalendar().monday.add(Calendar.DAY_OF_WEEK, 7).toDate
+case class FixedWeek extends Period {
+  def from = RichCalendar().monday
+  def to = RichCalendar().monday.add(7).to().dayOfWeek()
+
 }
+
+case class Month extends Period {
+  def from = RichCalendar().set.dayOfMonth.to(0)
+  def to = RichCalendar().set.dayOfMonth.to(0)
+}
+

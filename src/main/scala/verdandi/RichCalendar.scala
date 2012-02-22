@@ -64,19 +64,38 @@ class RichCalendar(val cal: Calendar) extends Ordered[Calendar] {
 
   def toDate(): RichDate = new RichDate(cal.getTime)
 
-  def dayOfWeek(dow: Int): RichCalendar = {
-    zeroableFields.foreach(cal.set(_, 0))
-    cal.set(DAY_OF_WEEK, dow)
-    this
+  def monday(): RichCalendar = set.dayOfWeek().to(MONDAY)
+
+  def set: SetCalendarValue = SetCalendarValue(this)
+
+  def add(value: Int) = AddDestination(this, value)
+
+}
+
+abstract case class CalendarMutator[A](dest: RichCalendar) {
+  def opn(field: Int): A
+  def dayOfMonth(): A = opn(Calendar.DAY_OF_MONTH)
+  def dayOfWeek(): A = opn(Calendar.DAY_OF_WEEK)
+}
+
+case class SetCalendarValue(_dest: RichCalendar) extends CalendarMutator[SetOpn](_dest) {
+  def opn(field: Int) = new SetOpn(dest, field)
+}
+class SetOpn(dest: RichCalendar, field: Int) {
+  def to(value: Int): RichCalendar = {
+    dest.cal.set(field, value)
+    dest
   }
-
-  def monday(): RichCalendar = dayOfWeek(MONDAY)
-
-  def add(field: Int, value: Int): RichCalendar = {
-    cal.add(field, value)
-    this
+}
+case class AddToCalendarValue(_dest: RichCalendar, value: Int) extends CalendarMutator[RichCalendar](_dest) {
+  def opn(field: Int): RichCalendar = {
+    dest.cal.set(field, value)
+    dest
   }
+}
 
+case class AddDestination(dest: RichCalendar, value: Int) {
+  def to(): CalendarMutator[RichCalendar] = new AddToCalendarValue(dest, value)
 }
 
 object RichCalendar {
