@@ -30,7 +30,7 @@ class RichCalendar(val cal: Calendar) extends Ordered[Calendar] {
 
   override def compare(other: Calendar): Int = cal.compareTo(other)
 
-  val zeroableFields = List(HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND)
+  val zeroableFields = List(MONTH, DAY_OF_MONTH, HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND)
 
   def zeroBelow(field: Int): RichCalendar = {
     zeroableFields.filter(_ > field).foreach(x => cal.set(x, 0))
@@ -70,12 +70,19 @@ class RichCalendar(val cal: Calendar) extends Ordered[Calendar] {
 
   def add(value: Int) = AddDestination(this, value)
 
+  def zeroAll = ZeroAll(this)
+
+  override def toString: String = cal.getTime().toString
+
 }
 
 abstract case class CalendarMutator[A](dest: RichCalendar) {
   def opn(field: Int): A
   def dayOfMonth(): A = opn(Calendar.DAY_OF_MONTH)
   def dayOfWeek(): A = opn(Calendar.DAY_OF_WEEK)
+  def month(): A = opn(Calendar.MONTH)
+  def hour(): A = opn(Calendar.HOUR_OF_DAY)
+  def minute(): A = opn(Calendar.MINUTE)
 }
 
 case class SetCalendarValue(_dest: RichCalendar) extends CalendarMutator[SetOpn](_dest) {
@@ -89,13 +96,26 @@ class SetOpn(dest: RichCalendar, field: Int) {
 }
 case class AddToCalendarValue(_dest: RichCalendar, value: Int) extends CalendarMutator[RichCalendar](_dest) {
   def opn(field: Int): RichCalendar = {
-    dest.cal.set(field, value)
+    dest.cal.add(field, value)
     dest
   }
 }
 
 case class AddDestination(dest: RichCalendar, value: Int) {
   def to(): CalendarMutator[RichCalendar] = new AddToCalendarValue(dest, value)
+}
+
+case class ZeroAll(dest: RichCalendar) {
+  case class ZeroAllBelow(_dest: RichCalendar) extends CalendarMutator[RichCalendar](_dest) {
+    def opn(field: Int): RichCalendar = {
+      dest.zeroableFields.filter(_ > field).foreach(x => {
+        dest.cal.set(x, 0)
+        println(":" + x)
+      })
+      dest
+    }
+  }
+  def below(): CalendarMutator[RichCalendar] = ZeroAllBelow(dest)
 }
 
 object RichCalendar {

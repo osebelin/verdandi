@@ -132,6 +132,7 @@ object SerializedFilePersistence extends AbstractUserStorage with CostUnitEditor
   }
 
   def getWorkRecords(from: Date, to: Date): List[WorkRecord] = {
+    logger.warn("Getting work records from %tF %tR to %tF %tR".format(from, from, to, to))
     def within(rec: WorkRecord): Boolean = !rec.getStartTime.before(from) && rec.getStartTime.getTime + rec.getDuration <= to.getTime
     workRecords.filter(r => within(r)).toList.sort(WorkRecord.sortByStartDate)
   }

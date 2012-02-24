@@ -13,25 +13,22 @@ import verdandi.ui.swing.RichBoxPanel
 import scala.swing.Orientation
 import scala.swing.ComboBox
 import scala.swing.Action
+import scala.swing.event.SelectionChanged
 
 class SummaryPanel extends RichBorderPanel {
   val summaryModel = new SummaryModel()
   val summaryTable = new WidthStoringTable(summaryModel)
 
   object PeriodSelectionPanel extends RichBoxPanel(Orientation.Horizontal) {
+    val periodSelector = new ComboBox(List(Period.Day, Period.CalendarWeek, Period.Month))
+    listenTo(periodSelector.selection)
+    contents += periodSelector
+    contents += createHorizontalGlue()
 
-    class Hallo extends Action("Hallo") {
-      override def apply() {
-        println("HALLO!")
-      }
-    }
-    class Welt extends Action("Welt") {
-      override def apply() {
-        println("HALLO!")
-      }
+    reactions += {
+      case sel: SelectionChanged => summaryModel.periodChanged(periodSelector.selection.item)
     }
 
-    contents += new ComboBox(List(new Hallo, new Welt))
   }
 
   add(new ScrollPane(summaryTable), BorderPanel.Position.Center);
