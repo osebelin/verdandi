@@ -11,6 +11,14 @@ import verdandi.event.EventBroadcaster
 import verdandi.Predef._
 import verdandi.ui.TextResources
 import verdandi.ui.summary.Period
+import javax.swing.SpinnerModel
+import javax.swing.AbstractSpinnerModel
+import verdandi.ui.summary.PeriodType
+import scala.swing.Publisher
+import scala.swing.event.ValueChanged
+import verdandi.event.VerdandiEvent
+
+case class SummaryPeriodChanged(val period: Period) extends VerdandiEvent
 
 class SummaryModel extends WidthStoringTableModel {
 
@@ -21,7 +29,7 @@ class SummaryModel extends WidthStoringTableModel {
 
   var items: List[SummaryItem] = _
 
-  var period: Period = Period.CalendarWeek
+  var period: Period = Period(PeriodType.CalendarWeek)
 
   loadItems()
 
@@ -34,6 +42,7 @@ class SummaryModel extends WidthStoringTableModel {
   def periodChanged(p: Period) {
     period = p
     loadItems()
+    EventBroadcaster.publish(SummaryPeriodChanged(period))
   }
 
   def loadItems() {
@@ -51,5 +60,36 @@ class SummaryModel extends WidthStoringTableModel {
       case 2 => rec.formatDurationInManHours()
     }
   }
+
+  object PeriodSpinnerModel extends AbstractSpinnerModel with Reactor {
+
+    listenTo(EventBroadcaster)
+
+    reactions += {
+      case evt: SummaryPeriodChanged => periodChanged()
+    }
+
+    def periodChanged() {
+      fireStateChanged()
+      loadItems()
+    }
+
+    override def getNextValue(): Object = {
+      period.increment
+      period
+    }
+
+    override def getPreviousValue(): Object = {
+      period.decrement
+      period
+    }
+
+    override def getValue(): Object = period
+
+    // Change was a side effect of getNextValue
+    override def setValue(value: Object): Unit = periodChanged()
+
+  }
+
 }
 

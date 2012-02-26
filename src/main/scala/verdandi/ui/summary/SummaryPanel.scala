@@ -14,19 +14,25 @@ import scala.swing.Orientation
 import scala.swing.ComboBox
 import scala.swing.Action
 import scala.swing.event.SelectionChanged
+import verdandi.ui.swing.Spinner
 
 class SummaryPanel extends RichBorderPanel {
   val summaryModel = new SummaryModel()
   val summaryTable = new WidthStoringTable(summaryModel)
 
   object PeriodSelectionPanel extends RichBoxPanel(Orientation.Horizontal) {
-    val periodSelector = new ComboBox(List(Period.Day, Period.CalendarWeek, Period.Month))
+    val periodSelector = new ComboBox(List(PeriodType.Day, PeriodType.CalendarWeek, PeriodType.Month))
     listenTo(periodSelector.selection)
+    periodSelector.selection.item = summaryModel.period.of
     contents += periodSelector
+    contents += createHorizontalStrut(5)
+    contents += new Spinner {
+      model = summaryModel.PeriodSpinnerModel
+    }
     contents += createHorizontalGlue()
 
     reactions += {
-      case sel: SelectionChanged => summaryModel.periodChanged(periodSelector.selection.item)
+      case sel: SelectionChanged => summaryModel.periodChanged(Period(periodSelector.selection.item))
     }
 
   }

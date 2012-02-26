@@ -80,6 +80,7 @@ abstract case class CalendarMutator[A](dest: RichCalendar) {
   def opn(field: Int): A
   def dayOfMonth(): A = opn(Calendar.DAY_OF_MONTH)
   def dayOfWeek(): A = opn(Calendar.DAY_OF_WEEK)
+  def weekOfYear(): A = opn(Calendar.WEEK_OF_YEAR)
   def month(): A = opn(Calendar.MONTH)
   def hour(): A = opn(Calendar.HOUR_OF_DAY)
   def minute(): A = opn(Calendar.MINUTE)
