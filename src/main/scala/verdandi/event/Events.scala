@@ -28,6 +28,7 @@ import verdandi.{ VerdandiException, VerdandiConfiguration }
 import verdandi.model.{ CostUnit, WorkRecord }
 import com.weiglewilczek.slf4s.Logging
 import verdandi.ui.summary.Period
+import verdandi.ui.summary.PeriodType
 
 abstract class VerdandiEvent extends Event {
   override def toString(): String = getClass.getSimpleName
@@ -67,6 +68,9 @@ case class StopTrackingWorkRecordEvent(@BeanProperty val workRecord: WorkRecord)
 
 /** The application is going to quit. */
 case class ApplicationShutdown() extends VerdandiEvent
+
+case class SummaryPeriodChanged(val period: Period) extends VerdandiEvent
+case class SummaryPeriodTypeChanged(val periodType: PeriodType) extends VerdandiEvent
 
 /**
  * event processing in Verdandi

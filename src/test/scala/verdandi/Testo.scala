@@ -1,20 +1,17 @@
 package verdandi
+import verdandi.ui.summary.Period
+import verdandi.ui.summary.PeriodType
+import java.text.SimpleDateFormat
+import java.util.Date
 
 object Testo {
 
   def main(args: Array[String]) {
-    val dFrom = RichCalendar()
-    println(dFrom)
 
-    dFrom.add(2).to().dayOfWeek();
-    println(dFrom)
+    val sdf = new SimpleDateFormat("MMMM yyyy")
 
-    dFrom.add(1).to().month()
-    println(dFrom)
-    dFrom.zeroAll.below().dayOfWeek();
-    println(dFrom)
-    dFrom.zeroAll.below().month();
-    println(dFrom)
+    println(sdf.format(new Date()))
+
   }
 
 }

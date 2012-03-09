@@ -17,8 +17,9 @@ import verdandi.ui.summary.PeriodType
 import scala.swing.Publisher
 import scala.swing.event.ValueChanged
 import verdandi.event.VerdandiEvent
-
-case class SummaryPeriodChanged(val period: Period) extends VerdandiEvent
+import verdandi.event.SummaryPeriodChanged
+import verdandi.event.SummaryPeriodTypeChanged
+import verdandi.Duration
 
 class SummaryModel extends WidthStoringTableModel {
 
@@ -39,16 +40,19 @@ class SummaryModel extends WidthStoringTableModel {
     }
   }
 
-  def periodChanged(p: Period) {
-    period = p
+  def periodTypeChanged(pt: PeriodType) {
+    period = Period(pt)
     loadItems()
-    EventBroadcaster.publish(SummaryPeriodChanged(period))
+    EventBroadcaster.publish(SummaryPeriodTypeChanged(pt))
   }
 
   def loadItems() {
     items = VerdandiModel.workRecordStorage.getDurationSummaries(period.from.toDate(), period.to.toDate())
     fireTableDataChanged();
+    EventBroadcaster.publish(SummaryPeriodChanged(period))
   }
+
+  def sumTotal(): Duration = Duration(items.foldLeft(0)((sum, item) => item.getDuration() + sum))
 
   override def getRowCount(): Int = items.length
 
@@ -66,7 +70,13 @@ class SummaryModel extends WidthStoringTableModel {
     listenTo(EventBroadcaster)
 
     reactions += {
-      case evt: SummaryPeriodChanged => periodChanged()
+      case evt: SummaryPeriodTypeChanged => periodTypeChanged()
+    }
+
+    def periodTypeChanged() {
+      println(">>> periodTypeChanged()")
+      //periodChanged()
+      fireStateChanged()
     }
 
     def periodChanged() {
