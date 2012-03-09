@@ -57,13 +57,13 @@ object PeriodType {
     def mutator(mutator: CalendarMutator[RichCalendar]) = mutator.dayOfMonth()
     protected def label = "summarypanel.periodselector.day"
     protected def getStartDate(from: RichCalendar) = from
-    override protected val formatter = new SimpleDateFormat("EEEE, dd.MM.yyyy")
+    override protected val formatter = new SimpleDateFormat("EE, dd.MM.yyyy")
 
   }
   object Month extends PeriodType with PointFormatter {
     def mutator(mutator: CalendarMutator[RichCalendar]) = mutator.month()
     protected def label = "summarypanel.periodselector.month"
-    override protected val formatter = new SimpleDateFormat("MMMM yyyy")
+    override protected val formatter = new SimpleDateFormat("MMM yyyy")
     protected def getStartDate(from: RichCalendar) = from.zeroAll.below().dayOfMonth().set.dayOfMonth.to(1)
   }
 

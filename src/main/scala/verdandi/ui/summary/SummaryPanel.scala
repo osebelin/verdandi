@@ -39,8 +39,6 @@ class SummaryPanel extends RichBorderPanel {
     load()
 
     val periodSelector = new ComboBox(List(PeriodType.Day, PeriodType.CalendarWeek, PeriodType.Month)) {
-      preferredSize = minimumSize
-      maximumSize = minimumSize
       selection.item = PeriodType(prefs("selectedType").value)
       summaryModel.periodTypeChanged(selection.item)
     }
