@@ -22,11 +22,10 @@ package verdandi.model.persistence
 
 import verdandi.model.WorkRecord
 import verdandi.model.CostUnit
-import verdandi.SummaryItem
 import verdandi.VerdandiConfiguration
 import java.util.Date
-
 import scala.swing.Publisher
+import verdandi.model.SummaryItem
 
 /**
  * Reading access to CostUnits

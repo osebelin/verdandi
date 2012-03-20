@@ -22,12 +22,12 @@ package verdandi.ui.report
 
 import verdandi.model.VerdandiConfiguration
 import verdandi.model.VerdandiModel
-import verdandi.SummaryItem
 import verdandi.ui.{ WidthStoringTable, TextResources => Text }
 import javax.swing.table.AbstractTableModel
 import scala.swing.{ BorderPanel, ScrollPane }
 import java.util.Date
 import verdandi.model.WidthStoringTableModel
+import verdandi.model.SummaryItem
 
 class ReportingPanel extends BorderPanel {
 
@@ -40,7 +40,7 @@ class ReportingPanel extends BorderPanel {
     var items: List[SummaryItem] = _
 
     private def loadItems() {
-      def byId(one: SummaryItem, other: SummaryItem): Boolean = one.getProjectid < other.getProjectid
+      def byId(one: SummaryItem, other: SummaryItem): Boolean = one.projectid < other.projectid
 
       //      val from = VerdandiConfiguration.reportFrom
       //      val to = VerdandiConfiguration.reportUntil
@@ -55,8 +55,8 @@ class ReportingPanel extends BorderPanel {
     def getValueAt(row: Int, col: Int): Object = {
       val si = items(row)
       col match {
-        case 0 => si.getProjectid
-        case 1 => si.getProjectName
+        case 0 => si.projectid
+        case 1 => si.projectName
         case 2 => si.formatDurationInManDays
       }
     }

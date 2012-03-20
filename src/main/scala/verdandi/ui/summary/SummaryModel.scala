@@ -1,5 +1,4 @@
 package verdandi.model
-import verdandi.SummaryItem
 import java.util.Date
 import verdandi.RichCalendar
 import verdandi.RichDate
@@ -52,15 +51,15 @@ class SummaryModel extends WidthStoringTableModel {
     EventBroadcaster.publish(SummaryPeriodChanged(period))
   }
 
-  def sumTotal(): Duration = Duration(items.foldLeft(0)((sum, item) => item.getDuration() + sum))
+  def sumTotal(): Duration = Duration(items.foldLeft(0)((sum, item) => item.duration + sum))
 
   override def getRowCount(): Int = items.length
 
   def getValueAt(row: Int, col: Int): Object = {
     val rec = items(row)
     col match {
-      case 0 => rec.getProjectid
-      case 1 => rec.getProjectName
+      case 0 => rec.projectid
+      case 1 => rec.projectName
       case 2 => rec.formatDurationInManHours()
     }
   }

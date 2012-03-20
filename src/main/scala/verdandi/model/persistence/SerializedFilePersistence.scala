@@ -26,10 +26,11 @@ import java.io.{ File, FileInputStream, FileOutputStream, ObjectInputStream, Obj
 import java.util.Date
 import scala.collection.mutable.{ ListBuffer, HashMap }
 import scala.swing.Reactor
-import verdandi.{ SummaryItem, VerdandiHelper }
+import verdandi.{ VerdandiHelper }
 import verdandi.event.{ EventBroadcaster, CostUnitChangedEvent, WorkRecordChangedEvent, WorkRecordDeletedEvent, PersonalCostUnitSelectionChanged, ApplicationShutdown }
 import verdandi.model.{ CostUnit, WorkRecord, VerdandiModel }
 import com.weiglewilczek.slf4s.Logging
+import verdandi.model.SummaryItem
 
 object SerializedFilePersistence extends AbstractUserStorage with CostUnitEditorStorage with Logging with Reactor {
 

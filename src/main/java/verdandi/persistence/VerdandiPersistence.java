@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import verdandi.SummaryItem;
 import verdandi.VerdandiConfiguration;
 import verdandi.event.EventBoard;
 import verdandi.model.CostUnit;
+import verdandi.model.SummaryItem;
 import verdandi.model.WorkRecord;
 
 public interface VerdandiPersistence {

@@ -30,7 +30,6 @@ import verdandi.persistence.PersistenceConfigurationDescription
 import verdandi.persistence.PersistenceListener
 import verdandi.persistence.SaveProgressMonitor
 import verdandi.persistence.VerdandiPersistence
-import verdandi.SummaryItem
 import verdandi.model.CostUnit
 import verdandi.model.WorkRecord
 import java.util.Date
@@ -39,6 +38,7 @@ import verdandi.VerdandiConfiguration
 import java.util.{ List => JList, ArrayList => JArrayList, Map => JMap, Set => JSet, HashSet => JHashSet, Collection => JCollection }
 import scala.collection.JavaConversions._
 import com.weiglewilczek.slf4s.Logging
+import verdandi.model.SummaryItem
 
 /**
  * Wraps around a new persistence implementation
