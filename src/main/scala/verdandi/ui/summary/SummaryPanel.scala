@@ -26,10 +26,18 @@ import verdandi.Pref
 import verdandi.StringPref
 import scala.swing.GridBagPanel
 import java.awt.Color
+import verdandi.event.SummaryPeriodTypeChanged
+import verdandi.model.DefaultListener
 
 class SummaryPanel extends RichBorderPanel {
   val summaryModel = new SummaryModel()
   val summaryTable = new WidthStoringTable(summaryModel)
+
+  reactions += {
+    case evt: SummaryPeriodTypeChanged => {
+      revalidate()
+    }
+  }
 
   object PeriodSelectionPanel extends RichGridBagPanel with Prefs {
 

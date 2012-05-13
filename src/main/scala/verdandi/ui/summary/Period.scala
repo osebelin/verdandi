@@ -37,7 +37,9 @@ abstract class PeriodType extends PeriodFormatter {
   protected def getStartDate(from: RichCalendar): RichCalendar
   def id = {
     val sn = getClass().getSimpleName()
-    sn.substring(sn.indexOf("$") + 1, sn.lastIndexOf("$"))
+    //    sn.substring(sn.indexOf("$") + 1, sn.lastIndexOf("$"))
+    // seems to have changed with either java 7 or scala 2.9.2
+    sn.substring(0, sn.lastIndexOf("$"))
   }
 
 }

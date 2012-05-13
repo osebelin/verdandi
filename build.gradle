@@ -7,9 +7,9 @@ repositories {
 
 
 dependencies {
-    scalaTools group: 'org.scala-lang', name: 'scala-compiler', version: '2.9.0'
-    scalaTools group: 'org.scala-lang', name: 'scala-library', version: '2.9.0'
-    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.9.0'
+    scalaTools group: 'org.scala-lang', name: 'scala-compiler', version: '2.9.2'
+    scalaTools group: 'org.scala-lang', name: 'scala-library', version: '2.9.2'
+    compile group: 'org.scala-lang', name: 'scala-swing', version: '2.9.2'
     compile group: 'log4j', name: 'log4j', version: '1.2.16'
     compile group: 'commons-logging', name: 'commons-logging', version: '1.1'
     compile group: 'com.weiglewilczek.slf4s', name: 'slf4s_2.9.0-1', version: '1.0.6'
