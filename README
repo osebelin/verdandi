@@ -1,5 +1,7 @@
 To build this project you need
 
+- Java 7
+- Scala 2.9.x
 - gradle
 - the Infonode docking window framework. Download it from
   http://www.infonode.net/index.html?idwdownload and place the idw-gpl.jar in
