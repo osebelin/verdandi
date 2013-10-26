@@ -1,6 +1,8 @@
 package verdandi.model
 
-class SummaryItem(val projectid: String, val projectName: String, val duration: Int) {
+import com.weiglewilczek.slf4s.Logging
+
+class SummaryItem(val projectid: String, val projectName: String, val duration: Int) extends Logging{
 
   val description = ""
 
@@ -11,6 +13,11 @@ class SummaryItem(val projectid: String, val projectName: String, val duration: 
     "%02d:%02d:%02d".format(days, hrs, mins);
   }
   def formatDurationInManHours() = "%02d:%02d".format(duration / 60, duration % 60);
+  def formatDurationInManHoursPercent(overallTime: Int) = {
+    val cal1 = (100.0f  / overallTime) : Float;
+    val perc = cal1 * duration : Float;
+    "%02.02f".format(perc)+"%";
+  };
 }
 
 object CompareSummaryItemByProjectId extends Ordering[SummaryItem] {

@@ -25,7 +25,8 @@ class SummaryModel extends WidthStoringTableModel {
   override val columnNames = List(
     "label.costunit.id",
     "label.costunit.name",
-    "label.duration")
+    "label.duration",
+    "label.duration.percentage")
 
   var items: List[SummaryItem] = _
 
@@ -61,6 +62,7 @@ class SummaryModel extends WidthStoringTableModel {
       case 0 => rec.projectid
       case 1 => rec.projectName
       case 2 => rec.formatDurationInManHours()
+      case 3 => rec.formatDurationInManHoursPercent(sumTotal.minutes); 
     }
   }
 
